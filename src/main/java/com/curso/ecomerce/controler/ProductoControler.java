@@ -7,6 +7,7 @@ import com.curso.ecomerce.service.ProductoService;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,8 @@ public class ProductoControler {
     private ProductoService productoService;
 
     @GetMapping("")
-    public String show(){
+    public String show(Model model){ //model lleva datos de back asta la vista
+        model.addAttribute("products",productoService.findAll());
         return "productos/show";
     }
 

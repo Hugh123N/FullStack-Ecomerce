@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @NoArgsConstructor
@@ -13,6 +14,11 @@ import java.util.Optional;
 public class ProductoServiceImpl implements ProductoService{
     @Autowired
     private ProductoRepository repository;
+
+    @Override
+    public List<Producto> findAll() {
+        return repository.findAll();
+    }
 
     @Override
     public Producto save(Producto producto) {
