@@ -9,12 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/productos")
 public class ProductoControler {
+
     // logger es para hacer prueba del guardado correcto por consola con INFO
     private final Logger LOGGER = LoggerFactory.getLogger(ProductoControler.class);
     @Autowired
@@ -40,5 +44,24 @@ public class ProductoControler {
         productoService.save(producto);
         return "redirect:/productos";
     }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Integer id, Model model){//model lleva datos de back a front
+        Producto product=new Producto();
+        Optional<Producto> optionalProducto=productoService.get(id);
+        product=optionalProducto.get();
+        LOGGER.info("producto buscado: {} ",product);
+        model.addAttribute("producto",product);
+        return "productos/edit";
+    }
+
+    @PostMapping("/update")
+    public String update(Producto producto){
+        productoService.update(producto);
+
+        return "redirect:/productos";
+    }
+
+
 
 }

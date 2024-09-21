@@ -21,13 +21,13 @@ public class ProductoServiceImpl implements ProductoService{
     }
 
     @Override
-    public Producto save(Producto producto) {
-        return repository.save(producto);
+    public Optional<Producto> get(Integer id) {
+        return repository.findById(id);
     }
 
     @Override
-    public Optional<Producto> get(Integer id) {
-        return repository.findById(id);
+    public Producto save(Producto producto) {
+        return repository.save(producto);
     }
 
     @Override
