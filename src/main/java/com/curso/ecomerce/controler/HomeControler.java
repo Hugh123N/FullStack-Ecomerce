@@ -3,6 +3,8 @@ package com.curso.ecomerce.controler;
 import com.curso.ecomerce.model.DetalleOrden;
 import com.curso.ecomerce.model.Orden;
 import com.curso.ecomerce.model.Producto;
+import com.curso.ecomerce.model.Usuario;
+import com.curso.ecomerce.service.IUsuarioService;
 import com.curso.ecomerce.service.ProductoService;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
@@ -23,6 +25,8 @@ public class HomeControler {
     private final Logger log= LoggerFactory.getLogger(HomeControler.class);
     @Autowired
     private ProductoService productoService;
+    @Autowired
+    private IUsuarioService usuarioService;
 
     //para almacenar los detalles de la orden
     List<DetalleOrden> detalles=new ArrayList<DetalleOrden>();
@@ -107,8 +111,12 @@ public class HomeControler {
     }
 
     @GetMapping("/order")
-    public String order(){
+    public String order(Model model){
+        Usuario usuario=usuarioService.findById(1).get();
 
+        model.addAttribute("usuario",usuario);
+        model.addAttribute("cart",detalles);
+        model.addAttribute("orden",orden);
         return "usuario/resumenorden";
     }
 
