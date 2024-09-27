@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Controller
@@ -147,5 +148,17 @@ public class HomeControler {
         detalles.clear();
         return "redirect:/";
     }
+    //busqueda de producto desde el navegador
+    @PostMapping("/search")
+    public String searchProduct(@RequestParam String nombre,Model model){
+        log.info("nombre del producto buscado {}",nombre);
+        //filtramos para que busque en la lista todos los nombre que contengan el nombre que ingresamos
+        List<Producto> productos=productoService.findAll().stream().filter(p ->p.getNombre().contains(nombre)).collect(Collectors.toList());
+
+        model.addAttribute("productos",productos);
+
+        return "usuario/home";
+    }
+
 
 }
