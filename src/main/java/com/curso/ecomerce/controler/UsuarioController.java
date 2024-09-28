@@ -47,7 +47,7 @@ public class UsuarioController {
         //si esta presente ese usuario entonces añadimos
         if(user.isPresent()){
             session.setAttribute("idUsuario",user.get().getId());
-            if(user.get().getTipo().equals("admin")){
+            if(user.get().getTipo().equals("ADMIN")){
                 return "redirect:/administrador";
             }else
                 return "redirect:/";
