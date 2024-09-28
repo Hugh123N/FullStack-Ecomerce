@@ -8,6 +8,7 @@ import com.curso.ecomerce.service.IDetalleOrdenService;
 import com.curso.ecomerce.service.IOrdenService;
 import com.curso.ecomerce.service.IUsuarioService;
 import com.curso.ecomerce.service.ProductoService;
+import jakarta.servlet.http.HttpSession;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,9 @@ public class HomeControler {
     Orden orden=new Orden();
 
     @GetMapping("")
-    public String home(Model model){
+    public String home(Model model, HttpSession session){
+
+        log.info("sesion del usuario: {}",session.getAttribute("idUsuario"));
         List<Producto> productos=productoService.findAll();
         model.addAttribute("productos",productos);
         return "usuario/home";
@@ -119,8 +122,9 @@ public class HomeControler {
     }
 
     @GetMapping("/order")
-    public String order(Model model){
-        Usuario usuario=usuarioService.findById(1).get();
+    public String order(Model model, HttpSession session){
+        int idUsuario=Integer.parseInt(session.getAttribute("idUsuario").toString());
+        Usuario usuario=usuarioService.findById(idUsuario).get();
 
         model.addAttribute("usuario",usuario);
         model.addAttribute("cart",detalles);
@@ -129,12 +133,13 @@ public class HomeControler {
     }
     //GUARDAR   ORDENESSSS
     @GetMapping("/saveOrder")
-    public String saveOrder(){
+    public String saveOrder(HttpSession session){
         Date fechaCreacion=new Date();
         orden.setFechaCreacion(fechaCreacion);
         orden.setNumero(ordenService.generarNumeroOrden());
         //usuario
-        Usuario usuario=usuarioService.findById(1).get();
+        int idUsuario=Integer.parseInt(session.getAttribute("idUsuario").toString());
+        Usuario usuario=usuarioService.findById(idUsuario).get();
 
         orden.setUsuario(usuario);
         ordenService.save(orden);

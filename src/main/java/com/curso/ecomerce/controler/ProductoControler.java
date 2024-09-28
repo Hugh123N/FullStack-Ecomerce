@@ -3,8 +3,11 @@ package com.curso.ecomerce.controler;
 //importa todo el paquete de logger con => *
 import com.curso.ecomerce.model.Producto;
 import com.curso.ecomerce.model.Usuario;
+import com.curso.ecomerce.service.IUsuarioService;
 import com.curso.ecomerce.service.ProductoService;
 import com.curso.ecomerce.service.UploadFileService;
+import com.curso.ecomerce.service.UsuarioServiceImpl;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +28,8 @@ public class ProductoControler {
     private ProductoService productoService;
     @Autowired
     private UploadFileService upload;
+    @Autowired
+    private IUsuarioService usuarioService;
 
     @GetMapping("")
     public String show(Model model){ //model lleva datos de back asta la vista
@@ -39,9 +44,10 @@ public class ProductoControler {
 
     //metodo que mapea la informacion que va guardar un producto
     @PostMapping("/save")
-    public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
+    public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
         LOGGER.info("este es el objeto producto {}",producto);
-        Usuario u=new Usuario(1,"","","","","","","",null,null);
+        int idUsuario=Integer.parseInt(session.getAttribute("idUsuario").toString());
+        Usuario u=usuarioService.findById(idUsuario).get();
         producto.setUsuario(u);
 
         //imagen
