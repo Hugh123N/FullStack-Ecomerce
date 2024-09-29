@@ -1,5 +1,6 @@
 package com.curso.ecomerce.controler;
 
+import com.curso.ecomerce.model.DetalleOrden;
 import com.curso.ecomerce.model.Orden;
 import com.curso.ecomerce.model.Usuario;
 import com.curso.ecomerce.service.IOrdenService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -71,5 +73,17 @@ public class UsuarioController {
 
         model.addAttribute("ordenes",ordenes);
         return "usuario/compras";
+    }
+
+    @GetMapping("/detalle/{id}")
+    public String detalleCompra(@PathVariable Integer id,HttpSession session, Model model){
+        log.info("ID de la orden {}",id);
+        //session
+        model.addAttribute("sesion",session.getAttribute("idUsuario"));
+
+        Optional<Orden> orden=ordenService.findById(id);
+        model.addAttribute("detalles",orden.get().getDetalle());
+        log.info("detalles listados {}",orden.get().getDetalle());
+        return "usuario/detallecompra";
     }
 }
