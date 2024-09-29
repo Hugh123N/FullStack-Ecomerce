@@ -3,6 +3,7 @@ package com.curso.ecomerce.controler;
 
 import com.curso.ecomerce.model.Producto;
 import com.curso.ecomerce.model.Usuario;
+import com.curso.ecomerce.service.IOrdenService;
 import com.curso.ecomerce.service.IUsuarioService;
 import com.curso.ecomerce.service.ProductoService;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,8 @@ public class AdministradorController {
     private ProductoService productoService;
     @Autowired
     private IUsuarioService usuarioService;
+    @Autowired
+    private IOrdenService ordenService;
 
     @GetMapping("")
     public String home(Model model){//para mandar los productos hacia la vista home
@@ -31,11 +34,18 @@ public class AdministradorController {
 
         return "administrador/home";
     }
-
+    //para ver lista de usuarios
     @GetMapping("/usuarios")
     public String usuario(Model model){
         List<Usuario> usuarios=usuarioService.findAll();
         model.addAttribute("usuarios",usuarios);
         return "administrador/usuarios";
+    }
+    //lista de ordenes
+
+    @GetMapping("/ordenes")
+    public String ordenes( Model model){
+        model.addAttribute("ordenes",ordenService.findAll());
+        return "administrador/ordenes";
     }
 }
