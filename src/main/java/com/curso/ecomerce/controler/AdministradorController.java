@@ -2,6 +2,8 @@ package com.curso.ecomerce.controler;
 
 
 import com.curso.ecomerce.model.Producto;
+import com.curso.ecomerce.model.Usuario;
+import com.curso.ecomerce.service.IUsuarioService;
 import com.curso.ecomerce.service.ProductoService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ public class AdministradorController {
 
     @Autowired
     private ProductoService productoService;
+    @Autowired
+    private IUsuarioService usuarioService;
 
     @GetMapping("")
     public String home(Model model){//para mandar los productos hacia la vista home
@@ -26,5 +30,12 @@ public class AdministradorController {
         model.addAttribute("productos",producto);
 
         return "administrador/home";
+    }
+
+    @GetMapping("/usuarios")
+    public String usuario(Model model){
+        List<Usuario> usuarios=usuarioService.findAll();
+        model.addAttribute("usuarios",usuarios);
+        return "administrador/usuarios";
     }
 }
