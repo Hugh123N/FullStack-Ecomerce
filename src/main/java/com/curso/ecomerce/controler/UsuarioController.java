@@ -86,4 +86,10 @@ public class UsuarioController {
         log.info("detalles listados {}",orden.get().getDetalle());
         return "usuario/detallecompra";
     }
+    //cierre de sesion
+    @GetMapping("/cerrar")
+    public String cerrarSesion(HttpSession session){
+        session.removeAttribute("idUsuario");
+        return "redirect:/";
+    }
 }
