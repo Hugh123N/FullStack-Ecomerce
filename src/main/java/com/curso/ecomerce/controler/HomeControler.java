@@ -54,17 +54,20 @@ public class HomeControler {
     }
 
     @GetMapping("productohome/{id}")
-    public String productoHome(@PathVariable Integer id,Model model){
+    public String productoHome(@PathVariable Integer id,Model model, HttpSession session){
+
         log.info("id enviado como parametro {}",id);
         Producto producto=new Producto();
         Optional<Producto> productoOptional=productoService.get(id);
         producto=productoOptional.get();
         model.addAttribute("producto",producto);
+        //session
+        model.addAttribute("sesion", session.getAttribute("idUsuario"));
         return "usuario/productohome";
     }
 
     @PostMapping("/cart")
-    public String addCart(@RequestParam Integer id,@RequestParam Integer cantidad, Model model){
+    public String addCart(@RequestParam Integer id,@RequestParam Integer cantidad, Model model, HttpSession session){
         DetalleOrden detalleOrden=new DetalleOrden();
         Producto producto=new Producto();
         double sumaTotal=0;
@@ -92,6 +95,8 @@ public class HomeControler {
 
         model.addAttribute("cart",detalles);
         model.addAttribute("orden",orden);
+        //session
+        model.addAttribute("sesion", session.getAttribute("idUsuario"));
         return "usuario/carrito";
     }
 
@@ -128,13 +133,21 @@ public class HomeControler {
 
     @GetMapping("/order")
     public String order(Model model, HttpSession session){
-        int idUsuario=Integer.parseInt(session.getAttribute("idUsuario").toString());
-        Usuario usuario=usuarioService.findById(idUsuario).get();
+        try {
+            int idUsuario=Integer.parseInt(session.getAttribute("idUsuario").toString());
+            if(idUsuario>0){
+                Usuario usuario=usuarioService.findById(idUsuario).get();
 
-        model.addAttribute("usuario",usuario);
-        model.addAttribute("cart",detalles);
-        model.addAttribute("orden",orden);
-        return "usuario/resumenorden";
+                model.addAttribute("usuario",usuario);
+                model.addAttribute("cart",detalles);
+                model.addAttribute("orden",orden);
+                return "usuario/resumenorden";
+            }
+
+        }catch (Exception e){
+            e.fillInStackTrace();
+        }
+        return "usuario/login";
     }
     //GUARDAR   ORDENESSSS
     @GetMapping("/saveOrder")
