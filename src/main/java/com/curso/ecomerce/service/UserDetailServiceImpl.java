@@ -16,28 +16,22 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserDetailServiceImpl implements UserDetailsService {
+public class UserDetailServiceImpl implements UserDetailsService{
 
     @Autowired //inyecta a esta clase
     private IUsuarioService usuarioService;
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-    @Autowired
     HttpSession session;
-
     private Logger log= LoggerFactory.getLogger(UserDetailServiceImpl.class);
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("esto es el username");
         Optional<Usuario> optionalUser=usuarioService.findByEmail(username);
         if(optionalUser.isPresent()){
-            log.info("esto es el id del usuario {}",optionalUser.get().getId());
             session.setAttribute("idUsuario", optionalUser.get().getId());
             Usuario usuario=optionalUser.get();
-            return User.builder().username(usuario.getNombre())
-                    .password(passwordEncoder.encode(usuario.getPassword())).roles(usuario.getTipo()).build();
+            return new SecurityUser(usuario);
         }else
             throw new UsernameNotFoundException("Usuario no encontrado");
     }
