@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.curso</groupId>
-	<artifactId>ecomercePractica</artifactId>
+	<artifactId>ecomerce</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ecomercePractica</name>
 	<description>practica ecommerce </description>
